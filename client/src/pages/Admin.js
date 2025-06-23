@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import Toast from '../components/Toast';
+import ImageGenerator from '../components/ImageGenerator';
 import './Admin.css';
 
 const Admin = () => {
@@ -9,6 +10,7 @@ const Admin = () => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
+  const [showImageGenerator, setShowImageGenerator] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
   const [toast, setToast] = useState(null);
   const [formData, setFormData] = useState({
@@ -82,6 +84,16 @@ const Admin = () => {
     });
     setEditingProduct(null);
     setShowForm(false);
+    setShowImageGenerator(false);
+  };
+
+  const handleImageGenerated = (imageUrl) => {
+    setFormData(prev => ({
+      ...prev,
+      imageUrl
+    }));
+    setShowImageGenerator(false);
+    showToast('Image URL added to form!', 'success');
   };
 
   const handleSubmit = async (e) => {
@@ -274,16 +286,48 @@ const Admin = () => {
 
               <div className="form-group">
                 <label htmlFor="imageUrl">Image URL</label>
-                <input
-                  type="url"
-                  id="imageUrl"
-                  name="imageUrl"
-                  value={formData.imageUrl}
-                  onChange={handleInputChange}
-                  className="form-input"
-                  placeholder="https://example.com/image.jpg"
-                />
+                <div className="image-url-section">
+                  <input
+                    type="url"
+                    id="imageUrl"
+                    name="imageUrl"
+                    value={formData.imageUrl}
+                    onChange={handleInputChange}
+                    className="form-input"
+                    placeholder="https://example.com/image.jpg"
+                  />
+                  <button 
+                    type="button"
+                    onClick={() => setShowImageGenerator(!showImageGenerator)}
+                    className="btn btn-outline"
+                  >
+                    🎨 Generate Image
+                  </button>
+                </div>
+                {formData.imageUrl && (
+                  <div className="image-preview">
+                    <img 
+                      src={formData.imageUrl} 
+                      alt="Product preview"
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                        e.target.nextSibling.style.display = 'block';
+                      }}
+                    />
+                    <div className="image-error" style={{ display: 'none' }}>
+                      Invalid image URL
+                    </div>
+                  </div>
+                )}
               </div>
+
+              {showImageGenerator && (
+                <ImageGenerator
+                  onImageGenerated={handleImageGenerated}
+                  productName={formData.name}
+                  productDescription={formData.description}
+                />
+              )}
 
               <div className="form-actions">
                 <button type="submit" className="btn btn-primary">

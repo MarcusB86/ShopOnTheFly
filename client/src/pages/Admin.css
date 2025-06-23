@@ -42,6 +42,35 @@
   margin-top: 1.5rem;
 }
 
+.image-url-section {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-end;
+}
+
+.image-url-section .form-input {
+  flex: 1;
+}
+
+.image-preview {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.image-preview img {
+  max-width: 200px;
+  max-height: 200px;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-sm);
+  border: 2px solid var(--border-color);
+}
+
+.image-error {
+  color: var(--error-color);
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+}
+
 .admin-products h2 {
   font-size: 1.5rem;
   font-weight: 600;
@@ -126,6 +155,11 @@
 
   .form-actions {
     flex-direction: column;
+  }
+
+  .image-url-section {
+    flex-direction: column;
+    align-items: stretch;
   }
 
   .products-table {

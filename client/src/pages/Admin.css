@@ -1,0 +1,157 @@
+.admin-page {
+  padding: 2rem 0;
+}
+
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.admin-header h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.admin-form {
+  background-color: var(--surface-color);
+  padding: 2rem;
+  border-radius: var(--border-radius);
+  margin-bottom: 3rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.admin-form h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: var(--text-primary);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.admin-products h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: var(--text-primary);
+}
+
+.products-table {
+  background-color: var(--background-color);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.products-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.products-table th,
+.products-table td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.products-table th {
+  background-color: var(--surface-color);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.products-table tr:hover {
+  background-color: var(--surface-color);
+}
+
+.product-thumbnail {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: var(--border-radius);
+}
+
+.action-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.delete-btn {
+  color: var(--error-color);
+  border-color: var(--error-color);
+}
+
+.delete-btn:hover {
+  background-color: var(--error-color);
+  color: white;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .admin-page {
+    padding: 1rem 0;
+  }
+
+  .admin-header {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .admin-header h1 {
+    font-size: 2rem;
+  }
+
+  .admin-form {
+    padding: 1.5rem;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .products-table {
+    overflow-x: auto;
+  }
+
+  .products-table table {
+    min-width: 600px;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-header h1 {
+    font-size: 1.75rem;
+  }
+
+  .admin-form {
+    padding: 1rem;
+  }
+
+  .products-table th,
+  .products-table td {
+    padding: 0.75rem;
+  }
+} 

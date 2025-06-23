@@ -43,6 +43,11 @@ const Navbar = () => {
               <Link to="/orders" className="nav-link" onClick={() => setIsMenuOpen(false)}>
                 Orders
               </Link>
+              {user?.role === 'admin' && (
+                <Link to="/admin" className="nav-link admin-link" onClick={() => setIsMenuOpen(false)}>
+                  ⚙️ Admin
+                </Link>
+              )}
               <div className="nav-dropdown">
                 <button className="nav-link dropdown-toggle" onClick={toggleMenu}>
                   👤 {user?.firstName}
@@ -51,6 +56,11 @@ const Navbar = () => {
                   <Link to="/profile" className="dropdown-item" onClick={() => setIsMenuOpen(false)}>
                     Profile
                   </Link>
+                  {user?.role === 'admin' && (
+                    <Link to="/admin" className="dropdown-item" onClick={() => setIsMenuOpen(false)}>
+                      Admin Panel
+                    </Link>
+                  )}
                   <button className="dropdown-item" onClick={handleLogout}>
                     Logout
                   </button>

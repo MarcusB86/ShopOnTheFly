@@ -1,4 +1,5 @@
 const pool = require('./connection');
+const bcrypt = require('bcryptjs');
 
 const createTables = async () => {
   try {
@@ -92,6 +93,22 @@ const createTables = async () => {
 
 const insertSampleData = async () => {
   try {
+    // Insert admin user
+    const hashedPassword = await bcrypt.hash('admin123', 10);
+    await pool.query(`
+      INSERT INTO users (email, password, first_name, last_name, role) VALUES
+      ('admin@shoponthefly.com', $1, 'Admin', 'User', 'admin')
+      ON CONFLICT (email) DO NOTHING
+    `, [hashedPassword]);
+
+    // Insert sample customer user
+    const customerPassword = await bcrypt.hash('customer123', 10);
+    await pool.query(`
+      INSERT INTO users (email, password, first_name, last_name, role) VALUES
+      ('customer@shoponthefly.com', $1, 'John', 'Customer', 'customer')
+      ON CONFLICT (email) DO NOTHING
+    `, [customerPassword]);
+
     // Insert sample categories
     await pool.query(`
       INSERT INTO categories (name, description) VALUES
@@ -114,6 +131,8 @@ const insertSampleData = async () => {
     `);
 
     console.log('✅ Sample data inserted successfully');
+    console.log('👤 Admin user: admin@shoponthefly.com / admin123');
+    console.log('👤 Customer user: customer@shoponthefly.com / customer123');
 
   } catch (error) {
     console.error('❌ Error inserting sample data:', error);

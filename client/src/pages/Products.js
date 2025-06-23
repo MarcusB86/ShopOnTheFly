@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
+import Toast from '../components/Toast';
 import './Products.css';
 
 const Products = () => {
@@ -11,7 +13,10 @@ const Products = () => {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [sortBy, setSortBy] = useState('name');
   const [sortOrder, setSortOrder] = useState('asc');
+  const [toast, setToast] = useState(null);
   const { addToCart } = useCart();
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchCategories();
@@ -21,6 +26,14 @@ const Products = () => {
   useEffect(() => {
     fetchProducts();
   }, [searchTerm, selectedCategory, sortBy, sortOrder]);
+
+  const showToast = (message, type = 'info') => {
+    setToast({ message, type });
+  };
+
+  const hideToast = () => {
+    setToast(null);
+  };
 
   const fetchCategories = async () => {
     try {
@@ -62,10 +75,9 @@ const Products = () => {
   const handleAddToCart = async (productId) => {
     const result = await addToCart(productId, 1);
     if (result.success) {
-      // You could show a toast notification here
-      console.log('Added to cart successfully');
+      showToast('Added to cart successfully!', 'success');
     } else {
-      alert(result.error);
+      showToast(result.error, 'error');
     }
   };
 
@@ -76,12 +88,23 @@ const Products = () => {
     setSortOrder('asc');
   };
 
+  const handleCreateProduct = () => {
+    navigate('/admin');
+  };
+
   return (
     <div className="products-page">
       <div className="container">
         <div className="products-header">
-          <h1>Our Products</h1>
-          <p>Discover amazing products at great prices</p>
+          <div className="header-content">
+            <h1>Our Products</h1>
+            <p>Discover amazing products at great prices</p>
+          </div>
+          {user?.role === 'admin' && (
+            <button onClick={handleCreateProduct} className="btn btn-primary">
+              ➕ Create Product
+            </button>
+          )}
         </div>
 
         {/* Filters */}
@@ -161,19 +184,34 @@ const Products = () => {
                     }}
                   />
                   <div className="product-overlay">
-                    <button
-                      onClick={() => handleAddToCart(product.id)}
-                      className="btn btn-primary btn-sm"
-                    >
-                      Add to Cart
-                    </button>
+                    {product.stock_quantity > 0 ? (
+                      <button
+                        onClick={() => handleAddToCart(product.id)}
+                        className="btn btn-primary btn-sm"
+                      >
+                        Add to Cart
+                      </button>
+                    ) : (
+                      <button className="btn btn-outline btn-sm" disabled>
+                        Out of Stock
+                      </button>
+                    )}
                   </div>
+                  {user?.role === 'admin' && (
+                    <div className="admin-badge">
+                      <Link to={`/admin`} className="admin-edit-link">
+                        ✏️ Edit
+                      </Link>
+                    </div>
+                  )}
                 </div>
                 <div className="product-info">
                   <h3 className="product-name">
                     <Link to={`/products/${product.id}`}>{product.name}</Link>
                   </h3>
-                  <p className="product-category">{product.category_name}</p>
+                  <p className="product-category">
+                    {product.category_name || 'Uncategorized'}
+                  </p>
                   <p className="product-description">
                     {product.description?.length > 100
                       ? `${product.description.substring(0, 100)}...`
@@ -183,18 +221,34 @@ const Products = () => {
                     <p className="product-price">${parseFloat(product.price).toFixed(2)}</p>
                     <p className="product-stock">
                       {product.stock_quantity > 0 ? (
-                        <span className="in-stock">In Stock ({product.stock_quantity})</span>
+                        <span className="in-stock">
+                          In Stock ({product.stock_quantity})
+                        </span>
                       ) : (
                         <span className="out-of-stock">Out of Stock</span>
                       )}
                     </p>
                   </div>
+                  {user?.role === 'admin' && (
+                    <div className="admin-info">
+                      <small>ID: {product.id}</small>
+                      <small>Created: {new Date(product.created_at).toLocaleDateString()}</small>
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
           </div>
         )}
       </div>
+
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={hideToast}
+        />
+      )}
     </div>
   );
 };

@@ -17,12 +17,22 @@
 ## Frontend (Vercel)
 1. ✅ Go to [vercel.com](https://vercel.com)
 2. ✅ Connect GitHub repo
-3. ✅ Set root directory: `client`
+3. ✅ **IMPORTANT**: In project settings, set:
+   - **Root Directory**: `client`
+   - **Build Command**: `npm run build`
+   - **Output Directory**: `build`
+   - **Install Command**: `npm install`
 4. ✅ Set environment variables:
    ```
    REACT_APP_API_URL=https://your-backend-url.railway.app/api
    ```
 5. ✅ Deploy and get frontend URL
+
+## Alternative: Use vercel.json (Automatic)
+If you have the `vercel.json` file in your repo, Vercel will automatically:
+- Use the correct build command
+- Set the output directory
+- Handle the monorepo structure
 
 ## Database Setup
 1. ✅ In Railway dashboard, go to backend service
@@ -40,5 +50,10 @@
 - **Frontend**: `https://your-app.vercel.app`
 - **Backend**: `https://your-app.railway.app`
 - **API**: `https://your-app.railway.app/api`
+
+## Troubleshooting
+- **Build fails**: Make sure root directory is set to `client` in Vercel
+- **API not found**: Check that `REACT_APP_API_URL` is set correctly
+- **Database errors**: Run the setup script in Railway
 
 🎉 Your ecommerce app is now live! 🛒✨ 

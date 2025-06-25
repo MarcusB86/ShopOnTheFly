@@ -4,22 +4,22 @@ This guide covers deploying your ecommerce app to production using modern cloud 
 
 ## 🎯 **Recommended Deployment Stack**
 
-### **Frontend: Vercel** ⭐
-- **Platform**: [vercel.com](https://vercel.com)
-- **Cost**: Free tier available
-- **Best for**: React applications
+### **Frontend: Vercel or Netlify** ⭐
+- **Vercel**: [vercel.com](https://vercel.com) - Best for React applications
+- **Netlify**: [netlify.com](https://netlify.com) - Excellent alternative with great features
+- **Cost**: Free tier available on both
 - **Setup time**: 5 minutes
 
-### **Backend: Railway** ⭐
-- **Platform**: [railway.app](https://railway.app)
+### **Backend: Render** ⭐
+- **Platform**: [render.com](https://render.com)
 - **Cost**: Free tier available
 - **Best for**: Node.js + PostgreSQL
 - **Setup time**: 10 minutes
 
-### **Alternative: Render**
-- **Platform**: [render.com](https://render.com)
+### **Alternative: Railway**
+- **Platform**: [railway.app](https://railway.app)
 - **Cost**: Free tier available
-- **Best for**: Full-stack applications
+- **Best for**: Node.js + PostgreSQL
 
 ## 📋 **Pre-Deployment Checklist**
 
@@ -76,6 +76,65 @@ NODE_ENV=production
    - Vercel will automatically deploy on every Git push
    - Your app will be available at: `https://your-app.vercel.app`
 
+### **Frontend Deployment (Netlify)**
+
+1. **Prepare Frontend**
+   ```bash
+   cd client
+   npm run build
+   ```
+
+2. **Deploy to Netlify**
+   - Go to [netlify.com](https://netlify.com)
+   - Sign up with GitHub
+   - Click "New site from Git"
+   - Connect your repository
+
+3. **Configure Build Settings**
+   - **Base directory**: `client`
+   - **Build command**: `npm run build`
+   - **Publish directory**: `build`
+   - **Node version**: `18` (or your preferred version)
+
+4. **Environment Variables**
+   - Go to Site Settings → Environment Variables
+   - Add: `REACT_APP_API_URL=https://your-backend-url.com/api`
+
+5. **Deploy**
+   - Netlify will automatically deploy on every Git push
+   - Your app will be available at: `https://your-app.netlify.app`
+
+### **Backend Deployment (Render)**
+
+1. **Prepare Backend**
+   ```bash
+   cd server
+   # Ensure package.json has start script
+   ```
+
+2. **Deploy to Render**
+   - Go to [render.com](https://render.com)
+   - Sign up with GitHub
+   - Create new project
+   - Connect your repository
+
+3. **Add PostgreSQL Database**
+   - Click "New" → "PostgreSQL"
+   - Render will provide connection string
+
+4. **Configure Environment Variables**
+   ```bash
+   DATABASE_URL=postgresql://username:password@host:port/database
+   JWT_SECRET=your-super-secret-jwt-key
+   NODE_ENV=production
+   PORT=5000
+   FRONTEND_URL=https://your-frontend-url.netlify.app
+   ```
+
+5. **Deploy**
+   - Render will automatically deploy
+   - Your API will be available at: `https://your-app.onrender.com`
+
 ### **Backend Deployment (Railway)**
 
 1. **Prepare Backend**
@@ -100,6 +159,7 @@ NODE_ENV=production
    JWT_SECRET=your-super-secret-jwt-key
    NODE_ENV=production
    PORT=5000
+   FRONTEND_URL=https://your-frontend-url.netlify.app
    ```
 
 5. **Deploy**
